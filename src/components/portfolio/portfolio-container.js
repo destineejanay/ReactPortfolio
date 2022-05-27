@@ -10,11 +10,11 @@ export default class PortfolioContainer extends Component {
             pageTitle: "Welcome to my Portfolio",
             isLoading: false,
             data: [
-                { title: "United States Navy", category: "Military" },
-                { title: "InterWorks", category: "Technology" },
-                { title: "Total Wine & More", category: "Service" },
-                { title: "Panera Bread", category: "Food Service" },
-                { title: "McAlister's Deli", category: "Food Service" }
+                { title: "United States Navy", category: "Military", slug: "us-navy" },
+                { title: "InterWorks", category: "Technology", slug: "interworks" },
+                { title: "Total Wine & More", category: "Service", slug: "total-wine" },
+                { title: "Panera Bread", category: "Food Service", slug: "panera" },,
+                { title: "McAlister's Deli", category: "Food Service", slug: "mcalisters" },
             ]
         };
         this.handleFilter = this.handleFilter.bind(this);
@@ -30,7 +30,7 @@ export default class PortfolioContainer extends Component {
     }
     portfolioItems() {
         return this.state.data.map(item => {
-            return <PortfolioItem title={item.title} url={"google.com"} />;
+            return <PortfolioItem key={item.title} title={item.title} url={"google.com"} slug={item.slug} />;
         });
     }
 

@@ -3,3 +3,7 @@ body {
     font-family: 'Gentium Plus', serif;
 }
 
+.container {
+    display: grid;
+    grid-template-columns: 1fr;
+}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import PortfolioItem from './portfolio-item';
+import axios from 'axios';
 
+import PortfolioItem from './portfolio-item';
 
 export default class PortfolioContainer extends Component {
     constructor() {
@@ -9,16 +10,9 @@ export default class PortfolioContainer extends Component {
         this.state = {
             pageTitle: "Welcome to my Portfolio",
             isLoading: false,
-            data: [
-                { title: "United States Navy", category: "Military", slug: "us-navy" },
-                { title: "InterWorks", category: "Technology", slug: "interworks" },
-                { title: "Total Wine & More", category: "Service", slug: "total-wine" },
-                { title: "Panera Bread", category: "Food Service", slug: "panera" },,
-                { title: "McAlister's Deli", category: "Food Service", slug: "mcalisters" },
-            ]
+            data: []
         };
         this.handleFilter = this.handleFilter.bind(this);
-        // this.handlePageTitleUpdate = this.handlePageTitleUpdate.bind(this);
     }
 
     handleFilter(filter) {
@@ -28,22 +22,35 @@ export default class PortfolioContainer extends Component {
             })
         })
     }
+
+    getPortfolioItems() {
+        axios
+            .get("https://destineemuse.devcamp.space/portfolio/portfolio_items")
+            .then(response => {
+                this.setState({
+                    data: response.data.portfolio_items
+                });
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
     portfolioItems() {
         return this.state.data.map(item => {
-            return <PortfolioItem key={item.title} title={item.title} url={"google.com"} slug={item.slug} />;
+            return <PortfolioItem key={item.id} item={item} />;
         });
     }
 
-    // handlePageTitleUpdate() {
-    //     this.setState({
-    //         pageTitle: "Something Else"
-    //     })
-    // }
+    componentDidMount() {
+        this.getPortfolioItems();
+    }
 
     render() {
         if (this.state.isLoading) {
             return <div>Loading...</div>;
         }
+
         return (
             <div>
                 <h2>{this.state.pageTitle}</h2>

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
 
 export default class Login extends Component {
   constructor(props) {
@@ -14,40 +14,46 @@ export default class Login extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value,
       errorText: ""
-    })
+    });
   }
 
   handleSubmit(event) {
-    axios.post("https://api.devcamp.space/sessions",
-    {
-      client: {
-        email: this.state.email,
-        password: this.state.password
-      }
-    },
-    { withCredentials: true }
-    )
-    .then(response => {
-      if (response.data.status === 'created') {
-        console.log("You can come in...")
-      } else {
-        this.setState({
-          errorText: "Wrong email or password"
-        })
-      }
-    })
-    .catch(error => {
-      this.setState({ 
-        errorText: "An error occurred",
+    axios
+      .post(
+        "https://api.devcamp.space/sessions",
+        {
+          client: {
+            email: this.state.email,
+            password: this.state.password
+          }
+        },
+        { withCredentials: true }
+      )
+      .then(response => {
+        if (response.data.status === "created") {
+          this.props.handleSuccessfulAuth();
+        } else {
+          this.setState({
+            errorText: "Wrong email or password"
+          });
+          this.props.handleUnsuccessfulAuth();
+        }
       })
-    });
+      .catch(error => {
+        this.setState({
+          errorText: "An error occurred"
+        });
+        this.props.handleUnsuccessfulAuth();
+      });
 
     event.preventDefault();
   }
+
   render() {
     return (
       <div>
@@ -77,6 +83,6 @@ export default class Login extends Component {
           </div>
         </form>
       </div>
-    )
+    );
   }
 }
